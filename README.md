@@ -106,6 +106,34 @@ Write the image to another medium for booting.
     $ sudo dd if=gentoo.img of= ...
 
 
+## Usage
+
+_Makefile is a work in progress._
+
+Generate the gentoo.img disk image.
+
+    $ sudo make
+
+Write the image to a disk.
+
+    $ sudo dd status=progress bs=4096 if=work/gentoo.img of=...
+
+
+## Testing
+
+Test the kernel and image with QEMU.
+
+    $ qemu-system-arm \
+      -M virt \
+      -append 'root=/dev/vda2' \
+      -cpu cortex-a15 \
+      -drive file='gentoo.img,if=virtio,format=raw' \
+      -kernel zImage \
+      -nographic \
+      -smp '2'
+
+
+
 ## References
 
 - [Devsus](https://github.com/dimkr/devsus)
