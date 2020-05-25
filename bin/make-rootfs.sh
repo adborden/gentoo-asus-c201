@@ -24,5 +24,12 @@ EOF
 # Set the root password as `gentoo`.
 sed -i 's/root\:\*/root\:\$6\$I9Q9AyTL\$Z76H7wD8mT9JAyrp\/vaYyFwyA5wRVN0tze8pvM\.MqScC7BBm2PU7pLL0h5nSxueqUpYAlZTox4Ag2Dp5vchjJ0/' $rootfs/etc/shadow
 
+# Copy kernel modules
+tar xvpf $workdir/modules.tar.xz -C $rootfs
+
+# Copy firmware
+cp -a /lib/firmware $rootfs/lib/firmware
+
 # tar it up
-tar cpvf $workdir/rootfs.tar.xz --numeric-owner --acls --xattrs -C $rootfs .
+tar cpvJf $workdir/rootfs.tar.xz --numeric-owner --acls --xattrs -C $rootfs .
+rm -rf $rootfs

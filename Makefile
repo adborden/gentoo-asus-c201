@@ -1,6 +1,6 @@
 
-OUT := work
-KERNEL_DIR := /usr/src/linux-4.9.221-gentoo
+OUT := $(shell pwd)/work
+KERNEL_DIR := /usr/src/linux
 
 STAGE3 := stage3-armv7a_hardfp-20200509T210605Z.tar.xz
 
@@ -19,16 +19,19 @@ $(OUT)/stage3-verified: $(OUT)/$(STAGE3) $(OUT)/$(STAGE3).DIGESTS.asc
 	bin/verify-stage3.sh $<
 	touch $@
 
-$(OUT)/rootfs.tar.xz: $(OUT)/$(STAGE3) $(OUT)/stage3-verified
+$(OUT)/rootfs.tar.xz: $(OUT)/$(STAGE3) $(OUT)/stage3-verified $(OUT)/modules.tar.xz
 	bin/make-rootfs.sh $< $(OUT) 
 
 $(OUT)/bootloader.bin:
 	dd if=/dev/zero of=$@ bs=512 count=1 conv=sparse
 
-$(OUT)/zImage:
+$(OUT)/modules.tar.xz:
+	KERNEL_DIR=$(KERNEL_DIR) bin/make-kernel.sh
+
+$(OUT)/zImage: $(OUT)/modules.tar.xz
 	cp $(KERNEL_DIR)/arch/arm/boot/zImage $@
 
-$(OUT)/rk3288-veyron-speedy.dtb:
+$(OUT)/rk3288-veyron-speedy.dtb: $(OUT)/modules.tar.xz
 	cp $(KERNEL_DIR)/arch/arm/boot/dts/rk3288-veyron-speedy.dtb $@
 
 $(OUT)/gentoo.itb: kernel/gentoo.its $(OUT)/zImage $(OUT)/rk3288-veyron-speedy.dtb
