@@ -83,11 +83,15 @@ Copy kernel files to working directory.
 
 Generate U-Boot Flattened Image Tree.
 
-    $ mkimage -f kernel/gentoo.its kernel/gentoo.itb
+    $ mkimage -D '-I dts -O dtb -p 2048' -f kernel/gentoo.its kernel/gentoo.itb
+
+Create an empty bootloader.
+
+    $ dd if=/dev/zero of=bootloader.bin bs=512 count=1
 
 Sign and pack the kernel.
 
-    $ futility --debug vbutil_kernel --arch arm --version 1 --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --bootloader kernel/kernel.flags --config kernel/kernel.flags --vmlinuz kernel/gentoo.itb --pack kernel/vmlinuz.signed
+    $ futility --debug vbutil_kernel --arch arm --version 1 --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --bootloader bootloader.bin --config kernel/kernel.flags --vmlinuz kernel/gentoo.itb --pack kernel/vmlinuz.signed
 
 Write the signed kernel to the kernel partition.
 
