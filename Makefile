@@ -25,8 +25,8 @@ $(OUT)/rootfs.tar.xz: $(OUT)/$(STAGE3) $(OUT)/stage3-verified $(OUT)/modules.tar
 $(OUT)/bootloader.bin:
 	dd if=/dev/zero of=$@ bs=512 count=1 conv=sparse
 
-$(OUT)/modules.tar.xz:
-	KERNEL_DIR=$(KERNEL_DIR) bin/make-kernel.sh
+$(OUT)/modules.tar.xz: kernel/config.txt
+	KERNEL_DIR=$(KERNEL_DIR) bin/make-kernel.sh $(OUT)
 
 $(OUT)/zImage: $(OUT)/modules.tar.xz
 	cp $(KERNEL_DIR)/arch/arm/boot/zImage $@

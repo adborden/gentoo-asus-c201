@@ -2,6 +2,7 @@
 
 set -o errexit
 set -o pipefail
+set -o nounset
 
 workdir=$1
 modules_dir=$(mktemp --directory $workdir/modules-XXXXXXX)
@@ -16,9 +17,9 @@ cp kernel/config.txt $KERNEL_DIR/.config
 
 (
   cd $KERNEL_DIR
-#  #kmake clean
-#  kmake olddefconfig
-#  kmake zImage dtbs modules
+  kmake clean
+  kmake olddefconfig
+  kmake zImage dtbs modules
   kmake INSTALL_MOD_PATH=$modules_dir modules_install
 )
 

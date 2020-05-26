@@ -2,6 +2,7 @@
 
 set -o errexit
 set -o pipefail
+set -o nounset
 
 vmlinuz=$1
 rootfs=$2
@@ -18,7 +19,8 @@ parted -a optimal $image unit mib mkpart kernel 4 65
 parted -a optimal $image unit mib mkpart root 65 100%
 
 # Set partition parameters
-cgpt add -i 1 -t kernel -S 1 -T 5 -P 15 $image
+cgpt add -i 1 -t kernel -l Kernel -S 1 -T 5 -P 10 $image
+cgpt add -i 2 -t basicdata -l Root $image
 
 loop=$(losetup -f $image -P --show)
 
