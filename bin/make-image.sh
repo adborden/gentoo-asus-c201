@@ -3,6 +3,7 @@
 set -o errexit
 set -o pipefail
 set -o nounset
+set -x
 
 vmlinuz=$1
 rootfs=$2
@@ -35,7 +36,7 @@ mountpoint=$(mktemp --directory $workdir/root-XXXXXXX)
 mount ${loop}p2 $mountpoint
 
 # Copy rootfs to the image
-tar xvf $rootfs --numeric-owner --xattrs --acls -C $mountpoint
+tar xf $rootfs --numeric-owner --xattrs --acls -C $mountpoint
 umount $mountpoint
 
 # Detach the loop device

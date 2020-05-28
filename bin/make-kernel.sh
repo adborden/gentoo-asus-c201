@@ -3,6 +3,7 @@
 set -o errexit
 set -o pipefail
 set -o nounset
+set -x
 
 workdir=$1
 modules_dir=$(mktemp --directory $workdir/modules-XXXXXXX)
@@ -23,5 +24,5 @@ cp kernel/config.txt $KERNEL_DIR/.config
   kmake INSTALL_MOD_PATH=$modules_dir modules_install
 )
 
-tar cvJf $workdir/modules.tar.xz -C $modules_dir .
+tar cJf $workdir/modules.tar.xz -C $modules_dir .
 rm -rf $modules_dir

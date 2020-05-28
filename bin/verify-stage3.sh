@@ -3,6 +3,7 @@
 set -o errexit
 set -o pipefail
 set -o nounset
+set -x
 
 stage3=$1
 workdir=$(dirname $stage3)
