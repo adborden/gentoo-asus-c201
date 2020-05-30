@@ -1,6 +1,6 @@
 
 OUT := $(shell pwd)/work
-KERNEL_DIR := /usr/src/linux
+KERNEL_DIR := /usr/src/linux-5.4.38-gentoo
 
 STAGE3 := stage3-armv7a_hardfp-20200509T210605Z.tar.xz
 
