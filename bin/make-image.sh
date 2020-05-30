@@ -38,6 +38,7 @@ mount ${loop}p2 $mountpoint
 # Copy rootfs to the image
 tar xf $rootfs --numeric-owner --xattrs --acls -C $mountpoint
 umount $mountpoint
+rmdir $mountpoint
 
 # Detach the loop device
 losetup -d $loop

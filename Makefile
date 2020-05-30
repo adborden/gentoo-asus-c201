@@ -35,7 +35,8 @@ $(OUT)/rk3288-veyron-speedy.dtb: $(OUT)/modules.tar.xz
 	cp $(KERNEL_DIR)/arch/arm/boot/dts/rk3288-veyron-speedy.dtb $@
 
 $(OUT)/gentoo.itb: kernel/gentoo.its $(OUT)/zImage $(OUT)/rk3288-veyron-speedy.dtb
-	mkimage -D '-I dts -O dtb -p 2048' -f kernel/gentoo.its $@
+	cp kernel/gentoo.its $(OUT)/
+	cd $(OUT) && mkimage -D '-I dts -O dtb -p 2048' -f gentoo.its $@
 
 $(OUT)/vmlinuz.signed: $(OUT)/gentoo.itb kernel/kernel.flags $(OUT)/bootloader.bin
 	futility --debug vbutil_kernel --arch arm --version 1 --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --bootloader $(OUT)/bootloader.bin --config kernel/kernel.flags --vmlinuz $(OUT)/gentoo.itb --pack $@
