@@ -2,6 +2,8 @@
 
 https://wiki.gentoo.org/wiki/Creating_bootable_media_for_depthcharge_based_devices
 
+https://en.wikipedia.org/wiki/Rockchip_RK3288
+
 
 ## Boot medium
 
@@ -136,4 +138,5 @@ Test the kernel and image with QEMU.
 
 ## References
 
-- [Devsus](https://github.com/dimkr/devsus)
+- [dimkr/devsus](https://github.com/dimkr/devsus)
+- [Miouyouyou/RockMyy](https://github.com/Miouyouyou/RockMyy)
