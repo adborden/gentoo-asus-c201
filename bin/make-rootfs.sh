@@ -7,6 +7,7 @@ set -x
 
 stage3=$1
 workdir=$2
+
 rootfs=$(mktemp --directory $workdir/rootfs-XXXXXXX)
 
 function cleanup () {
@@ -15,7 +16,8 @@ function cleanup () {
 
 trap cleanup EXIT
 
-tar xpf $workdir/stage3-armv7a_hardfp-20200509T210605Z.tar.xz --numeric-owner --acls --xattrs -C $rootfs
+# Start with the stage3 base
+tar xpf $stage3 --numeric-owner --acls --xattrs -C $rootfs
 
 # Configure portage for arm
 cat <<EOF >> $rootfs/etc/portage/make.conf

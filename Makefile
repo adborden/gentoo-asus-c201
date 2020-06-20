@@ -2,7 +2,9 @@
 OUT := $(shell pwd)/work
 KERNEL_DIR := /usr/src/linux-5.4.38-gentoo
 
-STAGE3 := stage3-armv7a_hardfp-20200509T210605Z.tar.xz
+STAGE3_VERSION := 20200509T210605Z
+STAGE3 := stage3-armv7a_hardfp-$(STAGE3_VERSION).tar.xz
+
 
 all: $(OUT)/gentoo.img
 
@@ -10,10 +12,10 @@ clean:
 	rm -rf $(OUT)/*
 
 $(OUT)/$(STAGE3).DIGESTS.asc:
-	cd $(OUT) && wget --timestamping https://bouncer.gentoo.org/fetch/root/all/releases/arm/autobuilds/20200509T210605Z/$(STAGE3).DIGESTS.asc
+	cd $(OUT) && wget --timestamping https://bouncer.gentoo.org/fetch/root/all/releases/arm/autobuilds/$(STAGE3_VERSION)/$(STAGE3).DIGESTS.asc
 
 $(OUT)/$(STAGE3):
-	cd $(OUT) && wget --timestamping https://bouncer.gentoo.org/fetch/root/all/releases/arm/autobuilds/20200509T210605Z/$(STAGE3)
+	cd $(OUT) && wget --timestamping https://bouncer.gentoo.org/fetch/root/all/releases/arm/autobuilds/$(STAGE3_VERSION)/$(STAGE3)
 
 $(OUT)/stage3-verified: $(OUT)/$(STAGE3) $(OUT)/$(STAGE3).DIGESTS.asc
 	bin/verify-stage3.sh $<
