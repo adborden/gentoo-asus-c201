@@ -1,8 +1,11 @@
 # gentoo-asus-c201
 
+_This is a work-in-progress. There are still a lot of rough edges._
+
+https://wiki.gentoo.org/wiki/Asus_Chromebook_C201
+https://en.wikipedia.org/wiki/Rockchip_RK3288
 https://wiki.gentoo.org/wiki/Creating_bootable_media_for_depthcharge_based_devices
 
-https://en.wikipedia.org/wiki/Rockchip_RK3288
 
 
 ## Boot medium
