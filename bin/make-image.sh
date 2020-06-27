@@ -6,8 +6,9 @@ set -o nounset
 set -x
 
 vmlinuz=$1
-rootfs=$2
-workdir=$3
+rootfs_tarball=$2
+modules_tarball=$3
+workdir=$4
 
 image=$(mktemp $workdir/image-XXXXXXX)
 
@@ -36,7 +37,11 @@ mountpoint=$(mktemp --directory $workdir/root-XXXXXXX)
 mount ${loop}p2 $mountpoint
 
 # Copy rootfs to the image
-tar xf $rootfs --numeric-owner --xattrs --acls -C $mountpoint
+tar xpf $rootfs_tarball --numeric-owner --xattrs --acls -C $mountpoint
+
+# Copy kernel modules
+tar xpf $modules_tarball -C $mountpoint
+
 umount $mountpoint
 rmdir $mountpoint
 

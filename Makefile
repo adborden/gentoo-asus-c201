@@ -25,7 +25,7 @@ $(OUT)/stage3-verified: $(OUT)/$(STAGE3) $(OUT)/$(STAGE3).DIGESTS.asc
 	bin/verify-stage3.sh $<
 	touch $@
 
-$(OUT)/rootfs.tar.xz: $(OUT)/$(STAGE3) $(OUT)/stage3-verified $(OUT)/modules.tar.xz
+$(OUT)/rootfs.tar.xz: $(OUT)/$(STAGE3) $(OUT)/stage3-verified
 	bin/make-rootfs.sh $< $(OUT) 
 
 $(OUT)/bootloader.bin:
@@ -47,7 +47,7 @@ $(OUT)/gentoo.itb: kernel/gentoo.its $(OUT)/zImage $(OUT)/rk3288-veyron-speedy.d
 $(OUT)/vmlinuz.signed: $(OUT)/gentoo.itb kernel/kernel.flags $(OUT)/bootloader.bin
 	futility --debug vbutil_kernel --arch arm --version 1 --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --bootloader $(OUT)/bootloader.bin --config kernel/kernel.flags --vmlinuz $(OUT)/gentoo.itb --pack $@
 
-$(OUT)/gentoo.img: $(OUT)/vmlinuz.signed $(OUT)/rootfs.tar.xz
+$(OUT)/gentoo.img: $(OUT)/vmlinuz.signed $(OUT)/rootfs.tar.xz $(OUT)/modules.tar.xz
 	bin/make-image.sh $^ $(OUT)
 
 
