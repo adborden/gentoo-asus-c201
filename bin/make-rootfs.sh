@@ -51,4 +51,4 @@ sed -i 's/root\:\*/root\:\$6\$I9Q9AyTL\$Z76H7wD8mT9JAyrp\/vaYyFwyA5wRVN0tze8pvM\
 
 
 # tar it up
-tar cpJf $workdir/rootfs.tar.xz --numeric-owner --acls --xattrs -C $rootfs .
+tar cpf $workdir/rootfs.tar.xz --numeric-owner --use-compress-program="xz --threads 4" --acls --xattrs -C $rootfs .
