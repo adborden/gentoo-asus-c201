@@ -138,6 +138,21 @@ Test the kernel and image with QEMU.
       -smp '2'
 
 
+## Errata
+
+### IGNOREME GPT header
+
+Not all ASUS C201s are effected by this. I have the HAG2e eMMC which is. At the
+LBA 1 where the GPT partition should be, the header is `IGNOREME` rather than
+the expected `EFI PART`. The partition table cannot be overwritten and instead,
+the secondary partition table at the end of the disk should be read instead.
+This requires a [kernel patch](https://github.com/SolidHal/PrawnOS/blob/master/resources/BuildResources/patches-tested/kernel/0001-block-partitions-efi-Add-support-for-IGNOREME-GPT-si.patch) for Linux.
+
+Additionally, 16384 (8MB) is the first writable block on the MMC, so make sure your
+partitions start on/after that offset.
+
+Is this part of the eMMC used for the internal read-only flash?
+
 
 ## References
 

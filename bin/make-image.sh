@@ -17,8 +17,11 @@ dd if=/dev/zero conv=sparse of=$image count=4194304  # 2 * 1024 * 1024 * 1024 / 
 
 # Create the GPT partition table.
 parted $image mklabel gpt
-parted -a optimal $image unit mib mkpart kernel 4 65
-parted -a optimal $image unit mib mkpart root 65 100%
+
+# Some scripts use 4MiB starting offset successfully, but I found the first
+# writable block on the MMC was 16384.
+parted -a optimal $image unit mib mkpart kernel 8 72
+parted -a optimal $image unit mib mkpart root 72 100%
 
 # Set partition parameters
 cgpt add -i 1 -t kernel -l Kernel -S 1 -T 5 -P 10 $image
