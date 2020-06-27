@@ -5,8 +5,20 @@ KERNEL_DIR := /usr/armv7a-unknown-linux-gnueabihf/usr/src/linux-5.4.47-gentoo
 STAGE3_VERSION := 20200509T210605Z
 STAGE3 := stage3-armv7a_hardfp-$(STAGE3_VERSION).tar.xz
 
+bootloader_target := $(OUT)/bootloader.bin
+dtb_target := $(OUT)/rk3288-veyron-speedy.dtb
+gentoo_img_target := $(OUT)/gentoo.img
+itb_target := $(OUT)/gentoo.itb
+modules_target := $(OUT)/modules.tar.xz
+rootfs_target := $(OUT)/rootfs.tar.xz
+stage3_digests_target := $(OUT)/$(STAGE3).DIGESTS.asc
+stage3_target := $(OUT)/$(STAGE3)
+stage3_verified_target := $(OUT)/stage3-verified
+vmlinuz_signed_target := $(OUT)/vmlinuz.signed
+zimage_target := $(OUT)/zImage
 
-all: $(OUT)/gentoo.img
+
+all: $(gentoo_img_target)
 
 clean:
 	rm -rf $(OUT)/*
@@ -15,39 +27,39 @@ menuconfig:
 	cd $(KERNEL_DIR) && make -j 5 ARCH=arm CROSS_COMPILE=armv7a-unknown-linux-gnueabihf- menuconfig
 	cp $(KERNEL_DIR)/.config kernel/config.txt
 
-$(OUT)/$(STAGE3).DIGESTS.asc:
+$(stage3_digests_target):
 	cd $(OUT) && wget --timestamping https://bouncer.gentoo.org/fetch/root/all/releases/arm/autobuilds/$(STAGE3_VERSION)/$(STAGE3).DIGESTS.asc
 
-$(OUT)/$(STAGE3):
+$(stage3_target):
 	cd $(OUT) && wget --timestamping https://bouncer.gentoo.org/fetch/root/all/releases/arm/autobuilds/$(STAGE3_VERSION)/$(STAGE3)
 
-$(OUT)/stage3-verified: $(OUT)/$(STAGE3) $(OUT)/$(STAGE3).DIGESTS.asc
+$(stage3_verified_target): $(stage3_target) $(stage3_digests_target)
 	bin/verify-stage3.sh $<
 	touch $@
 
-$(OUT)/rootfs.tar.xz: $(OUT)/$(STAGE3) $(OUT)/stage3-verified
+$(rootfs_target): $(stage3_target) $(stage3_verified_target)
 	bin/make-rootfs.sh $< $(OUT) 
 
-$(OUT)/bootloader.bin:
+$(bootloader_target):
 	dd if=/dev/zero of=$@ bs=512 count=1 conv=sparse
 
-$(OUT)/modules.tar.xz: kernel/config.txt
+$(modules_target): kernel/config.txt
 	KERNEL_DIR=$(KERNEL_DIR) bin/make-kernel.sh $(OUT)
 
-$(OUT)/zImage: $(OUT)/modules.tar.xz
+$(zimage_target): $(modules_target)
 	cp $(KERNEL_DIR)/arch/arm/boot/zImage $@
 
-$(OUT)/rk3288-veyron-speedy.dtb: $(OUT)/modules.tar.xz
+$(dtb_target): $(modules_target)
 	cp $(KERNEL_DIR)/arch/arm/boot/dts/rk3288-veyron-speedy.dtb $@
 
-$(OUT)/gentoo.itb: kernel/gentoo.its $(OUT)/zImage $(OUT)/rk3288-veyron-speedy.dtb
-	cp kernel/gentoo.its $(OUT)/
+$(itb_target): kernel/gentoo.its $(zimage_target) $(dtb_target)
+	cp $< $(OUT)/
 	cd $(OUT) && mkimage -D '-I dts -O dtb -p 2048' -f gentoo.its $@
 
-$(OUT)/vmlinuz.signed: $(OUT)/gentoo.itb kernel/kernel.flags $(OUT)/bootloader.bin
+$(vmlinuz_signed_target): $(itb_target) $(bootloader_target) kernel/kernel.flags
 	futility --debug vbutil_kernel --arch arm --version 1 --keyblock /usr/share/vboot/devkeys/kernel.keyblock --signprivate /usr/share/vboot/devkeys/kernel_data_key.vbprivk --bootloader $(OUT)/bootloader.bin --config kernel/kernel.flags --vmlinuz $(OUT)/gentoo.itb --pack $@
 
-$(OUT)/gentoo.img: $(OUT)/vmlinuz.signed $(OUT)/rootfs.tar.xz $(OUT)/modules.tar.xz
+$(gentoo_img_target): $(vmlinuz_signed_target) $(rootfs_target) $(modules_target)
 	bin/make-image.sh $^ $(OUT)
 
 
