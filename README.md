@@ -7,7 +7,6 @@ https://en.wikipedia.org/wiki/Rockchip_RK3288
 https://wiki.gentoo.org/wiki/Creating_bootable_media_for_depthcharge_based_devices
 
 
-
 ## Boot medium
 
 
@@ -142,7 +141,7 @@ Test the kernel and image with QEMU.
 
 ### IGNOREME GPT header
 
-Not all ASUS C201s are effected by this. I have the HAG2e eMMC which is. At the
+Not all Asus C201s are effected by this. I have the HAG2e eMMC which is. At the
 LBA 1 where the GPT partition should be, the header is `IGNOREME` rather than
 the expected `EFI PART`. The partition table cannot be overwritten and instead,
 the secondary partition table at the end of the disk should be read instead.
@@ -156,8 +155,11 @@ Is this part of the eMMC used for the internal read-only flash?
 
 ## References
 
-- [dimkr/devsus](https://github.com/dimkr/devsus) is a libre distribution for
+- [SolidHal/PrawnOS](https://github.com/SolidHal/PrawnOS) libre distribution for
+  Asus C201.
+- [dimkr/devsus](https://github.com/dimkr/devsus) libre distribution for
   the Asus C201 based on [Devuan Linux](https://devuan.org/).
 - [Miouyouyou/RockMyy](https://github.com/Miouyouyou/RockMyy) collection of Linux kernel
   patches for RK3288.
 - [ChromiumOS board overlay](https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/overlay-veyron) Portage overlay used for the veyron board.
+- [chromiumos kernel firmware-3.14](https://chromium.googlesource.com/chromiumos/third_party/kernel/+/47adebebd49990cf35fba66cccaa62c46c6fe7f8/chromeos/config/armel/chromiumos-rockchip.flavour.config) kernel config for rockchip.
