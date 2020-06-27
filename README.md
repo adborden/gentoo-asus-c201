@@ -156,5 +156,8 @@ Is this part of the eMMC used for the internal read-only flash?
 
 ## References
 
-- [dimkr/devsus](https://github.com/dimkr/devsus)
-- [Miouyouyou/RockMyy](https://github.com/Miouyouyou/RockMyy)
+- [dimkr/devsus](https://github.com/dimkr/devsus) is a libre distribution for
+  the Asus C201 based on [Devuan Linux](https://devuan.org/).
+- [Miouyouyou/RockMyy](https://github.com/Miouyouyou/RockMyy) collection of Linux kernel
+  patches for RK3288.
+- [ChromiumOS board overlay](https://chromium.googlesource.com/chromiumos/overlays/board-overlays/+/master/overlay-veyron) Portage overlay used for the veyron board.
