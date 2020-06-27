@@ -1,6 +1,6 @@
 
 OUT := $(shell pwd)/work
-KERNEL_DIR := /usr/src/linux-5.4.38-gentoo
+KERNEL_DIR := /usr/armv7a-unknown-linux-gnueabihf/usr/src/linux-5.4.47-gentoo
 
 STAGE3_VERSION := 20200509T210605Z
 STAGE3 := stage3-armv7a_hardfp-$(STAGE3_VERSION).tar.xz
@@ -10,6 +10,10 @@ all: $(OUT)/gentoo.img
 
 clean:
 	rm -rf $(OUT)/*
+
+menuconfig:
+	cd $(KERNEL_DIR) && make -j 5 ARCH=arm CROSS_COMPILE=armv7a-unknown-linux-gnueabihf- menuconfig
+	cp $(KERNEL_DIR)/.config kernel/config.txt
 
 $(OUT)/$(STAGE3).DIGESTS.asc:
 	cd $(OUT) && wget --timestamping https://bouncer.gentoo.org/fetch/root/all/releases/arm/autobuilds/$(STAGE3_VERSION)/$(STAGE3).DIGESTS.asc
